@@ -8,6 +8,7 @@ export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
     {
       cookies: {
         async getAll() {
+          const cookieStore = await cookies();
           return await cookieStore.getAll();
         },
         async setAll(cookiesToSet) {
