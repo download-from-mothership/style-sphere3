@@ -8,9 +8,16 @@ export async function middleware(request: NextRequest) {
             request,
         });
 
+        const supabaseUrl = env().SUPABASE_URL || 'default_url';
+        const supabaseAnonKey = env().SUPABASE_ANON_KEY || 'default_key';
+
+        if (!supabaseUrl || !supabaseAnonKey) {
+            throw new Error('Supabase URL or Anon Key is not set');
+        }
+
         const supabase = createServerClient(
-            env().SUPABASE_URL,
-            env().SUPABASE_ANON_KEY,
+            supabaseUrl,
+            supabaseAnonKey,
             {
                 cookies: {
                     getAll() {
@@ -70,8 +77,8 @@ export async function middleware(request: NextRequest) {
         // of sync and terminate the user's session prematurely!
 
         if (process.env.NODE_ENV !== 'production') {
-            console.log('Supabase URL:', process.env.SUPABASE_URL);
-            console.log('Supabase Anon Key:', process.env.SUPABASE_ANON_KEY ? 'Set' : 'Not Set');
+            console.log('Supabase URL:', env().SUPABASE_URL);
+            console.log('Supabase Anon Key:', env().SUPABASE_ANON_KEY ? 'Set' : 'Not Set');
         }
 
         return supabaseResponse;

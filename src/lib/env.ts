@@ -19,4 +19,9 @@ export const reloadEnv = () => {
 
 reloadEnv();
 
-export const env = () => envRef.current;
+export function env() {
+    return {
+        SUPABASE_URL: process.env.SUPABASE_URL,
+        SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
+    };
+}

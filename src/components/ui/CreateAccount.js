@@ -1,31 +1,35 @@
 import React from 'react';
-import { signIn } from 'next-auth/react';
-import { Button } from 'shadcn/ui'; // Assuming Button is a component from Shadcn/UI
+import { Button, Input, Card, CardHeader, CardBody, CardFooter } from 'shadcn/ui';
 
-const CreateAccount = () => {
-  const baseUrl = process.env.BASE_URL || 'http://localhost:3000'; // Default value
-  console.log('Base URL:', baseUrl);
-
-  try {
-    const fullUrl = new URL('/auth/v1', baseUrl);
-    console.log('Full URL:', fullUrl.toString());
-
-    return (
-      <div className="create-account">
-        <h2>Create an Account</h2>
-        <Button onClick={() => signIn('google')} className="sso-button google">
-          Sign in with Google
-        </Button>
-        <Button onClick={() => signIn('apple')} className="sso-button apple">
-          Sign in with Apple
-        </Button>
-      </div>
-    );
-  } catch (error) {
-    console.error('Error constructing URL:', error);
-    // Handle error appropriately
-    return null;
-  }
+const AuthForm = () => {
+  return (
+    <Card className="auth-form-container">
+      <CardHeader>
+        <h2>Create an account</h2>
+        <p>Enter your email below to create your account</p>
+      </CardHeader>
+      <CardBody>
+        <div className="social-buttons">
+          <Button variant="outline" className="github-button">GitHub</Button>
+          <Button variant="outline" className="google-button">Google</Button>
+        </div>
+        <div className="divider">OR CONTINUE WITH</div>
+        <form>
+          <div className="input-group">
+            <label htmlFor="email">Email</label>
+            <Input type="email" id="email" placeholder="m@example.com" />
+          </div>
+          <div className="input-group">
+            <label htmlFor="password">Password</label>
+            <Input type="password" id="password" />
+          </div>
+        </form>
+      </CardBody>
+      <CardFooter>
+        <Button type="submit" className="create-account-button">Create account</Button>
+      </CardFooter>
+    </Card>
+  );
 };
 
-export default CreateAccount; 
+export default AuthForm; 
