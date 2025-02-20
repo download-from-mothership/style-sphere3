@@ -69,6 +69,11 @@ export async function middleware(request: NextRequest) {
         // If this is not done, you may be causing the browser and server to go out
         // of sync and terminate the user's session prematurely!
 
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('Supabase URL:', process.env.SUPABASE_URL);
+            console.log('Supabase Anon Key:', process.env.SUPABASE_ANON_KEY ? 'Set' : 'Not Set');
+        }
+
         return supabaseResponse;
     } catch (error) {
         console.error('Middleware error:', error);
