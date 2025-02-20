@@ -8,7 +8,7 @@ export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
     {
       cookies: {
         getAll() {
-          return cookieStore.getAll();
+          return await ookieStore.getAll();
         },
         setAll(cookiesToSet) {
           try {
