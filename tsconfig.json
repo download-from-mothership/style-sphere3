@@ -1,8 +1,10 @@
 {
+  "$schema": "./tsconfig-schema.json",
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    "types": ["vitest/globals"], // Ensure 'vitest/globals' is included for type definitions
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
@@ -13,7 +15,6 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "types": ["vitest/globals"],
     "plugins": [
       {
         "name": "next"

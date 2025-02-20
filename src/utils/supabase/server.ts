@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { Database } from "./database.types";
+import { Database } from "@/types/database"; // Corrected the import path
 
 export function createClient() {
   return createServerClient<Database>(
@@ -8,16 +8,19 @@ export function createClient() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return cookies().get(name)?.value;
+        async get(name: string) {
+          const cookieStore = await cookies();
+          return cookieStore.get(name)?.value;
         },
-        set(name: string, value: string, options: any) {
-          cookies().set(name, value, options);
+        async set(name: string, value: string, options: any) {
+          const cookieStore = await cookies();
+          cookieStore.set(name, value, options);
         },
-        remove(name: string, options: any) {
-          cookies().set(name, "", options);
+        async remove(name: string, options: any) {
+          const cookieStore = await cookies();
+          cookieStore.set(name, "", options);
         },
-      },
+      }
     }
   );
 }
