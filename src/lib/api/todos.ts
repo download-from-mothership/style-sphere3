@@ -12,7 +12,7 @@ export async function getTodos({ done }: { done?: boolean } = {}) {
         .order("created_at", { ascending: false });
 
     if (done !== undefined) {
-        query = query.eq("done", done);
+        query = query.eq("done", done as any);
     }
 
     const { data, error } = await query;
@@ -24,7 +24,7 @@ export async function getTodos({ done }: { done?: boolean } = {}) {
 export async function createTodo(todo: TodoInsert) {
     const { data, error } = await supabaseClient
         .from("todos")
-        .insert(todo)
+        .insert([todo])
         .select()
         .single();
 
@@ -35,8 +35,8 @@ export async function createTodo(todo: TodoInsert) {
 export async function updateTodo(id: number, todo: TodoUpdate) {
     const { data, error } = await supabaseClient
         .from("todos")
-        .update(todo)
-        .eq("id", id)
+        .update(todo as any)
+        .eq("id", id as any)
         .select()
         .single();
 
