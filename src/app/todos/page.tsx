@@ -66,6 +66,9 @@ export default function TodosPage() {
     }
   };
 
+  // Ensure todos is an array of objects with an 'id' property
+  const validTodos = Array.isArray(todos) ? todos.filter(todo => 'id' in todo) : [];
+
   return (
     <LayoutSidebar>
       <div className="container max-w-2xl py-8 mx-auto">
@@ -116,32 +119,32 @@ export default function TodosPage() {
                 <div className="flex justify-center py-8">
                   <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
                 </div>
-              ) : todos?.length === 0 ? (
+              ) : validTodos?.length === 0 ? (
                 <p className="py-8 text-center text-muted-foreground">{t('todos.noTodos')}</p>
               ) : (
-                todos?.map(todo => (
+                validTodos?.map((todo) => (
                   <div
-                    key={todo.id}
+                    key={String(todo.id)}
                     className="flex items-center justify-between gap-3 rounded-lg border bg-card p-4 shadow-sm transition-colors hover:bg-accent/10"
                   >
                     <div className="flex items-center gap-3">
                       <Checkbox
                         className="h-5 w-5"
-                        checked={todo.done || false}
-                        onCheckedChange={checked => toggleTodo(todo.id, checked as boolean)}
+                        checked={'done' in todo ? Boolean(todo.done) : false}
+                        onCheckedChange={checked => toggleTodo(Number(todo.id), Boolean(checked))}
                       />
                       <span
                         className={`text-base ${
-                          todo.done ? 'text-muted-foreground line-through' : ''
+                          'done' in todo && todo.done ? 'text-muted-foreground line-through' : ''
                         }`}
                       >
-                        {todo.label}
+                        {'label' in todo ? String(todo.label) : ''}
                       </span>
                     </div>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => deleteTodo(todo.id)}
+                      onClick={() => deleteTodo(Number(todo.id))}
                       disabled={deleteTodoMutation.isPending}
                       className="h-8 w-8 text-muted-foreground hover:text-destructive"
                     >
