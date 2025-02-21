@@ -2,10 +2,11 @@ import { type NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { env } from "@/lib/env";
 import { createClient } from '@supabase/supabase-js';
+import { someOtherFunction } from 'some-module';
 
 export async function middleware(request: NextRequest) {
     try {
-        let supabaseResponse = NextResponse.next({
+        const supabaseResponse = NextResponse.next({
             request,
         });
 
