@@ -12,58 +12,40 @@ export async function getTodos(): Promise<Todo[]> {
         .select("*")
         .order("created_at", { ascending: false });
 
-    if (error) throw error;
-    return data;
-}
+    if (error) {
+        console.error(`Error fetching todos: ${error.message}`);
+        return [];
+    }
+    return data ? (data as unknown as Todo[]) : [];
 
-export async function createTodo(todo: TodoInsert): Promise<Todo> {
-    const { data, error } = await supabaseClient
-        .from("todos")
-        .insert(todo)
-        .select()
-        .single();
-
-    if (error) throw error;
-    return data;
 }
 
 export async function updateTodo(id: number, todo: TodoUpdate): Promise<Todo> {
     const { data, error } = await supabaseClient
         .from("todos")
-        .update(todo)
-        .eq("id", id)
+        .update(todo as any)
+        .eq("id", id as any)
         .select()
         .single();
 
-    if (error) throw error;
-    return data;
+    if (error) {
+        console.error(`Error updating todo with id ${id}: ${error.message}`);
+        throw error;
+    }
+    return data as unknown as Todo;
 }
 
 export async function deleteTodo(id: number): Promise<boolean> {
     const { error } = await supabaseClient
         .from("todos")
         .delete()
-        .eq("id", id);
+        .eq("id", id as any);
 
     if (error) throw error;
     return true;
+
+
+function from(arg0: string) {
+    throw new Error("Function not implemented.");
 }
-
-// async function insertTodo() {
-//   const newTodo: TodoInsert = {
-//     label: "New Task",
-//     done: false
-//   };
-
-//   const { data, error } = await supabaseClient
-//     .from('todos')
-//     .insert([newTodo]);
-
-//   if (error) {
-//     console.error("Error inserting todo:", error);
-//   } else {
-//     console.log("Inserted todo:", data);
-//   }
-// } // This closing bracket is unnecessary and should be removed
-
-// insertTodo(); // This line is commented out and can be removed if not needed
+}
