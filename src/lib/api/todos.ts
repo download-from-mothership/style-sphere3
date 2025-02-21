@@ -6,7 +6,7 @@ export type Todo = Tables<"todos">;
 export type TodoInsert = TablesInsert<"todos">;
 export type TodoUpdate = TablesUpdate<"todos">;
 
-export async function getTodos() {
+export async function getTodos(): Promise<Todo[]> {
     const { data, error } = await supabaseClient
         .from("todos")
         .select("*")
@@ -16,7 +16,7 @@ export async function getTodos() {
     return data;
 }
 
-export async function createTodo(todo: TodoInsert) {
+export async function createTodo(todo: TodoInsert): Promise<Todo> {
     const { data, error } = await supabaseClient
         .from("todos")
         .insert(todo)
@@ -27,7 +27,7 @@ export async function createTodo(todo: TodoInsert) {
     return data;
 }
 
-export async function updateTodo(id: number, todo: TodoUpdate) {
+export async function updateTodo(id: number, todo: TodoUpdate): Promise<Todo> {
     const { data, error } = await supabaseClient
         .from("todos")
         .update(todo)
@@ -39,7 +39,7 @@ export async function updateTodo(id: number, todo: TodoUpdate) {
     return data;
 }
 
-export async function deleteTodo(id: number) {
+export async function deleteTodo(id: number): Promise<boolean> {
     const { error } = await supabaseClient
         .from("todos")
         .delete()
