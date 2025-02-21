@@ -16,15 +16,14 @@ export async function getTodos(): Promise<Todo[]> {
         console.error(`Error fetching todos: ${error.message}`);
         return [];
     }
-    return data ? (data as unknown as Todo[]) : [];
-
+    return data || [];
 }
 
 export async function updateTodo(id: number, todo: TodoUpdate): Promise<Todo> {
     const { data, error } = await supabaseClient
         .from("todos")
-        .update(todo as any)
-        .eq("id", id as any)
+        .update(todo)
+        .eq("id", id)
         .select()
         .single();
 
@@ -32,20 +31,29 @@ export async function updateTodo(id: number, todo: TodoUpdate): Promise<Todo> {
         console.error(`Error updating todo with id ${id}: ${error.message}`);
         throw error;
     }
-    return data as unknown as Todo;
+    return data as Todo;
 }
 
 export async function deleteTodo(id: number): Promise<boolean> {
     const { error } = await supabaseClient
         .from("todos")
         .delete()
-        .eq("id", id as any);
+        .eq("id", id);
 
     if (error) throw error;
     return true;
-
-
-function from(arg0: string) {
-    throw new Error("Function not implemented.");
 }
+
+export async function createTodo(todo: TodoInsert): Promise<Todo> {
+    const { data, error } = await supabaseClient
+        .from("todos")
+        .insert(todo)
+        .select()
+        .single();
+
+    if (error) {
+        console.error(`Error creating todo: ${error.message}`);
+        throw error;
+    }
+    return data as Todo;
 }
