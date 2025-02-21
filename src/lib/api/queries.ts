@@ -9,10 +9,10 @@ import {
 } from "./todos";
 import { useToast } from "@/hooks/use-toast";
 
-export function useTodos({ done }: { done?: boolean } = {}) {
+export function useTodos() {
     return useQuery({
-        queryKey: ["todos", { done }],
-        queryFn: () => getTodos({ done }),
+        queryKey: ["todos"],
+        queryFn: () => getTodos(),
     });
 }
 

@@ -23,7 +23,7 @@ type TodoFormValues = z.infer<typeof todoSchema>;
 export default function TodosPage() {
   const t = useTranslations();
   const [showAll, setShowAll] = React.useState(true);
-  const { data: todos, isLoading } = useTodos({ done: showAll ? undefined : false });
+  const { data: todos, isLoading } = useTodos();
   const createTodoMutation = useCreateTodo();
   const updateTodoMutation = useUpdateTodo();
   const deleteTodoMutation = useDeleteTodo();

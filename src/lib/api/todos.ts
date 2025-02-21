@@ -2,20 +2,15 @@ import supabaseClient from "@/lib/supabase-client";
 import { Tables, TablesInsert, TablesUpdate } from "@/types/database";
 
 export type Todo = Tables<"todos">;
+
 export type TodoInsert = TablesInsert<"todos">;
 export type TodoUpdate = TablesUpdate<"todos">;
 
-export async function getTodos({ done }: { done?: boolean } = {}) {
-    let query = supabaseClient
+export async function getTodos() {
+    const { data, error } = await supabaseClient
         .from("todos")
         .select("*")
         .order("created_at", { ascending: false });
-
-    if (done !== undefined) {
-        query = query.eq("done", done as any);
-    }
-
-    const { data, error } = await query;
 
     if (error) throw error;
     return data;
@@ -24,7 +19,7 @@ export async function getTodos({ done }: { done?: boolean } = {}) {
 export async function createTodo(todo: TodoInsert) {
     const { data, error } = await supabaseClient
         .from("todos")
-        .insert([todo])
+        .insert(todo)
         .select()
         .single();
 
@@ -35,8 +30,8 @@ export async function createTodo(todo: TodoInsert) {
 export async function updateTodo(id: number, todo: TodoUpdate) {
     const { data, error } = await supabaseClient
         .from("todos")
-        .update(todo as any)
-        .eq("id", id as any)
+        .update(todo)
+        .eq("id", id)
         .select()
         .single();
 
@@ -51,4 +46,24 @@ export async function deleteTodo(id: number) {
         .eq("id", id);
 
     if (error) throw error;
+    return true;
 }
+
+// async function insertTodo() {
+//   const newTodo: TodoInsert = {
+//     label: "New Task",
+//     done: false
+//   };
+
+//   const { data, error } = await supabaseClient
+//     .from('todos')
+//     .insert([newTodo]);
+
+//   if (error) {
+//     console.error("Error inserting todo:", error);
+//   } else {
+//     console.log("Inserted todo:", data);
+//   }
+// } // This closing bracket is unnecessary and should be removed
+
+// insertTodo(); // This line is commented out and can be removed if not needed
