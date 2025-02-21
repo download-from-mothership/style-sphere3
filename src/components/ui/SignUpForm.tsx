@@ -15,7 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import CreateAccount from '@/components/CreateAccount';
 
 // Define the form schema using Zod
 const formSchema = z.object({
@@ -110,8 +109,6 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
-
 export function SignUpPage() {
-  return <CreateAccount />;
+  return <SignUpForm />;
 }
