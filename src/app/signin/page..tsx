@@ -1,7 +1,7 @@
 // src/app/signin/page.tsx
 
 import React from 'react';
-import SignUpForm from '@/components/ui/SignUpForm';
+import { SignUpForm } from '@/components/ui/SignUpForm';
 
 const SignInPage = () => {
   return (
