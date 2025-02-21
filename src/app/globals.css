@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -96,8 +98,6 @@ body {
 .glow-effect:hover {
   box-shadow: 0 0 25px rgba(29, 78, 216, 0.8);
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap');
 
 .create-account-container {
   display: flex;
@@ -199,7 +199,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('/Users/aromano/Library/CloudStorage/ProtonDrive-acromano@pm.me-folder/KENSICO MGMT/APPS/STYLE-SPHERE2/style-sphere2/public/images/cosmic-background-image.jpg') no-repeat center center fixed;
+  background: url('/images/cosmic-background-image.jpg') no-repeat center center fixed;
   background-size: cover;
   opacity: 0.3;
   z-index: 0;
@@ -224,7 +224,7 @@ body {
     color: #333333; /* Example text color */
   }
   .bg-cosmic {
-    background-image: url('/Users/aromano/Library/CloudStorage/ProtonDrive-acromano@pm.me-folder/KENSICO MGMT/APPS/STYLE-SPHERE2/style-sphere2/public/images/cosmic-background-image.jpg');
+    background-image: url('public/images/cosmic-background-image.jpg');
     background-size: cover;
     background-position: center;
   }
