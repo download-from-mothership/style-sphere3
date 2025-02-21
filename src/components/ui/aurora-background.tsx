@@ -17,14 +17,13 @@ export const AuroraBackground = ({
     <main>
       <div
         className={cn(
-          "relative flex flex-col  h-[100vh] items-center justify-center bg-zinc-50 dark:bg-zinc-900  text-slate-950 transition-bg",
+          "relative flex flex-col h-[100vh] items-center justify-center bg-zinc-50 dark:bg-zinc-900 text-slate-950 transition-bg",
           className
         )}
         {...props}
       >
         <div className="absolute inset-0 overflow-hidden">
           <div
-            //   I'm sorry but this is what peak developer performance looks like // trigger warning
             className={cn(
               `
             [--white-gradient:repeating-linear-gradient(100deg,var(--white)_0%,var(--white)_7%,var(--transparent)_10%,var(--transparent)_12%,var(--white)_16%)]
@@ -52,3 +51,30 @@ export const AuroraBackground = ({
     </main>
   );
 };
+
+export function AuroraBackgroundDemo() {
+  return (
+    <AuroraBackground>
+      <motion.div
+        initial={{ opacity: 0.0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{
+          delay: 0.3,
+          duration: 0.8,
+          ease: "easeInOut",
+        }}
+        className="relative flex flex-col gap-4 items-center justify-center px-4"
+      >
+        <div className="text-3xl md:text-7xl font-bold dark:text-white text-center">
+          Background lights are cool you know.
+        </div>
+        <div className="font-extralight text-base md:text-4xl dark:text-neutral-200 py-4">
+          And this, is chemical burn.
+        </div>
+        <button className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-4 py-2">
+          Debug now
+        </button>
+      </motion.div>
+    </AuroraBackground>
+  );
+}
