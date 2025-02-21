@@ -1,225 +1,168 @@
-'use client';
+// app/create-account/page.js
+'use client'; // Required for client-side interactivity
 
-import { useForm } from 'react-hook-form';
-import { useState, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2 } from 'lucide-react';
-import LayoutSidebar from '@/components/layout-sidebar';
-import { useQueryClient } from '@tanstack/react-query';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import supabaseClient from '@/lib/supabase-client';
+import { useState } from 'react';
+import React from 'react';
+import '../create-account/create-account.css';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-
-type LoginFormInputs = {
-  email: string;
-  password: string;
-};
+import { motion } from "framer-motion";
+import { AuroraBackground } from '@/components/ui/aurora-background';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import {
+  IconBrandGoogle,
+  IconBrandApple,
+} from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
+// Import the font in your global CSS or _app.js file
+// Example: import 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap';
 
 export default function LoginPage() {
-  const queryClient = useQueryClient();
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const codeExchangeInProgress = useRef(false);
-  const {
-    register,
-    handleSubmit,
-    setError,
-    formState: { errors },
-    reset,
-  } = useForm<LoginFormInputs>();
-  const t = useTranslations();
+    return <LoginComponent />;
+}
 
-  useEffect(() => {
-    const handleAuthParams = async () => {
-      // Check for code in query params
-      const params = new URLSearchParams(window.location.search);
-      const code = params.get('code');
+function LoginComponent() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const router = useRouter();
 
-      if (code && !codeExchangeInProgress.current) {
-        codeExchangeInProgress.current = true;
-        setIsLoading(true);
-        try {
-          // Remove code from URL
-          params.delete('code');
-          const newUrl =
-            window.location.pathname + (params.toString() ? `?${params.toString()}` : '');
-          window.history.replaceState({}, '', newUrl);
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log('Logging in with:', { email, password });
 
-          // TODO: handle exchangeCodeForSession error and display error of redirect user with next router (no window.location.href) if data is returned
-
-          await supabaseClient.auth.exchangeCodeForSession(code);
-
-          const next = params.get('next') || '/';
-          queryClient.invalidateQueries();
-          window.location.href = next;
-        } catch (error) {
-          console.error('Error exchanging code for session:', error);
-          setError('root.serverError', {
-            message: t('auth.authError'),
-          });
-        } finally {
-          setIsLoading(false);
-        }
-        return;
-      }
-
-      // Handle hash params for other auth flows
-      if (window.location.hash) {
-        setIsLoading(true);
-        try {
-          const hashParams = new URLSearchParams(window.location.hash.substring(1));
-          const accessToken = hashParams.get('access_token');
-          const refreshToken = hashParams.get('refresh_token');
-          const type = hashParams.get('type');
-
-          if (accessToken && refreshToken) {
-            const {
-              data: { user },
-              error,
-            } = await supabaseClient.auth.setSession({
-              access_token: accessToken,
-              refresh_token: refreshToken,
-            });
-
-            if (error) throw error;
-
-            if (user) {
-              let next: string = '/';
-
-              if (type === 'invite') {
-                next = '/change-password';
-              } else {
-                // Get the next parameter from URL
-                const params = new URLSearchParams(window.location.search);
-                next = params.get('next') || next;
-              }
-
-              queryClient.invalidateQueries();
-              router.push(next);
-            }
-          }
-        } catch (error) {
-          console.error('Error setting session:', error);
-          setError('root.serverError', {
-            message: t('auth.authError'),
-          });
-        } finally {
-          setIsLoading(false);
-        }
-      }
+        // Assuming login is successful
+        router.push('/window');
     };
 
-    handleAuthParams();
-  }, [router, queryClient, setError, t]);
+    return (
+        <AuroraBackground>
+            <motion.div
+                initial={{ opacity: 0.0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                    delay: 0.3,
+                    duration: 0.8,
+                    ease: "easeInOut",
+                }}
+                className="relative flex flex-col gap-4 items-center justify-center px-4 min-h-screen"
+            >
+                <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
+                    <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
+                        Welcome Back
+                    </h2>
+                    <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
+                        Log in to continue to your account
+                    </p>
 
-  const onSubmit = async (input: LoginFormInputs) => {
-    setIsLoading(true);
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      const { error } = await supabaseClient.auth.signInWithPassword(input);
-      if (error) throw error;
-      queryClient.invalidateQueries();
-      reset();
+                    <form className="my-8" onSubmit={handleSubmit}>
+                        <LabelInputContainer className="mb-4">
+                            <Label htmlFor="email">Email Address</Label>
+                            <Input
+                                id="email"
+                                placeholder="projectmayhem@fc.com"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </LabelInputContainer>
+                        <LabelInputContainer className="mb-4">
+                            <Label htmlFor="password">Password</Label>
+                            <Input
+                                id="password"
+                                placeholder="••••••••"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </LabelInputContainer>
 
-      // Get the next parameter from URL
-      const params = new URLSearchParams(window.location.search);
-      const next = params.get('next') || '/';
-      queryClient.invalidateQueries();
-      router.push(next);
-    } catch (error) {
-      console.log(error);
-      setError('root.serverError', { message: (error as Error).message });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+                        <div className="login-container">
+                            <button
+                                className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+                                type="submit"
+                            >
+                                Log in &rarr;
+                                <BottomGradient />
+                            </button>
+                            <p className="text-neutral-600 dark:text-neutral-400 text-sm text-center mt-8">
+                                Don't have an account?{" "}
+                                <Link href="/create-account" className="text-neutral-500 dark:text-neutral-300">
+                                    Sign up
+                                </Link>
+                            </p>
+                        </div>
 
-  return (
-    <LayoutSidebar
-      containerClassName="bg-muted/50"
-      contentClassName="flex w-full h-full items-center justify-center"
-    >
-      <Card className="max-w-md w-full">
-        <CardHeader className="flex justify-center items-center gap-4">
-          <Image src="/images/logo.svg" alt={t('common.logo')} width={150} height={100} />
-          <CardTitle className="text-center text-lg font-extrabold">
-            {t('auth.signInTitle')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">{t('auth.emailLabel')}</Label>
-                <Input
-                  {...register('email', {
-                    required: t('auth.emailRequired'),
-                    pattern: {
-                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: t('auth.emailInvalid'),
-                    },
-                  })}
-                  id="email"
-                  type="email"
-                  placeholder={t('auth.emailPlaceholder')}
-                />
-                {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
-              </div>
+                        <div className="relative my-4">
+                            <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-neutral-300 dark:border-neutral-700" />
+                            </div>
+                            <div className="relative flex justify-center text-sm font-medium leading-6">
+                                <span className="bg-gray-50 px-6 text-neutral-400 dark:text-neutral-500 dark:bg-neutral-950">
+                                    Or continue with
+                                </span>
+                            </div>
+                        </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">{t('auth.passwordLabel')}</Label>
-                <Input
-                  {...register('password', {
-                    required: t('auth.passwordRequired'),
-                    minLength: {
-                      value: 6,
-                      message: t('auth.passwordMinLength'),
-                    },
-                  })}
-                  id="password"
-                  type="password"
-                  placeholder={t('auth.passwordPlaceholder')}
-                />
-                {errors.password && (
-                  <p className="text-sm text-destructive">{errors.password.message}</p>
-                )}
-              </div>
-            </div>
+                        <div className="flex space-x-4 justify-center">
+                            <button
+                                className="relative group/btn flex space-x-2 items-center justify-center px-4 w-full max-w-xs text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
+                                type="button"
+                            >
+                                <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+                                <span className="text-neutral-700 dark:text-neutral-300 text-sm">
+                                    Google
+                                </span>
+                                <BottomGradient />
+                            </button>
+                            <button
+                                className="relative group/btn flex space-x-2 items-center justify-center px-4 w-full max-w-xs text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
+                                type="button"
+                            >
+                                <IconBrandApple className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+                                <span className="text-neutral-700 dark:text-neutral-300 text-sm">
+                                    Apple
+                                </span>
+                                <BottomGradient />
+                            </button>
+                        </div>
 
-            <div className="text-right">
-              <Link
-                href="/auth/forgot-password"
-                className="text-sm font-medium text-primary hover:text-primary/80"
-              >
-                {t('auth.forgotPassword')}
-              </Link>
-            </div>
-
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {t('auth.signInLoading')}
-                </>
-              ) : (
-                t('auth.signInButton')
-              )}
-            </Button>
-
-            {errors.root?.serverError && (
-              <Alert variant="destructive">
-                <AlertDescription>{errors.root.serverError.message}</AlertDescription>
-              </Alert>
-            )}
-          </form>
-        </CardContent>
-      </Card>
-    </LayoutSidebar>
-  );
+                        <p className="text-neutral-600 dark:text-neutral-400 text-sm text-center mt-8">
+                            By logging in, you agree to our{" "}
+                            <Link href="/terms" className="text-neutral-500 dark:text-neutral-300">
+                                Terms of Service
+                            </Link>{" "}
+                            and{" "}
+                            <Link href="/privacy" className="text-neutral-500 dark:text-neutral-300">
+                                Privacy Policy
+                            </Link>
+                        </p>
+                    </form>
+                </div>
+            </motion.div>
+        </AuroraBackground>
+    );
 }
+
+const BottomGradient = () => {
+    return (
+        <>
+            <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+            <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+        </>
+    );
+};
+
+const LabelInputContainer = ({
+    children,
+    className,
+}: {
+    children: React.ReactNode;
+    className?: string;
+}) => {
+    return (
+        <div className={cn("flex flex-col space-y-2 w-full", className)}>
+            {children}
+        </div>
+    );
+};
