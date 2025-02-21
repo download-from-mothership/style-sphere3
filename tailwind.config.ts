@@ -60,7 +60,13 @@ const config: Config = {
     				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
     				border: 'hsl(var(--sidebar-border))',
     				ring: 'hsl(var(--sidebar-ring))'
-    			}
+    			},
+    			'kosmos-blue': '#1E3A8A',
+    			'kosmos-light': '#93C5FD',
+    			'kosmos-transparent': 'rgba(255, 255, 255, 0.1)',
+    		},
+    		backgroundImage: {
+    			'cosmic-gradient': 'linear-gradient(to bottom, #1E3A8A, #93C5FD)',
     		},
     		borderRadius: {
     			lg: 'var(--radius)',

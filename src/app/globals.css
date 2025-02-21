@@ -87,3 +87,12 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.glow-effect {
+  box-shadow: 0 0 15px rgba(29, 78, 216, 0.5);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.glow-effect:hover {
+  box-shadow: 0 0 25px rgba(29, 78, 216, 0.8);
+}
