@@ -96,3 +96,136 @@ body {
 .glow-effect:hover {
   box-shadow: 0 0 25px rgba(29, 78, 216, 0.8);
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap');
+
+.create-account-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e, #0f3460, #16213e);
+  position: relative;
+  overflow: hidden;
+}
+
+.transparent-square {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 40px;
+  width: 450px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+}
+
+.title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 2.8rem;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-field {
+  padding: 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  outline: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.input-field::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.submit-button {
+  padding: 14px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  background: #ffffff;
+  color: #0f3460;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.submit-button:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+.terms-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  margin-top: 20px;
+}
+
+.kosmos-branding {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-align: center;
+  margin-top: 30px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.create-account-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/Users/aromano/Library/CloudStorage/ProtonDrive-acromano@pm.me-folder/KENSICO MGMT/APPS/STYLE-SPHERE2/style-sphere2/public/images/cosmic-background-image.jpg') no-repeat center center fixed;
+  background-size: cover;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+/* Define custom classes within a @layer directive */
+@layer components {
+  .border-border {
+    /* Add your custom styles here */
+    border-width: 1px;
+    border-color: black; /* Example styles */
+  }
+}
+
+@layer utilities {
+  .bg-background {
+    /* Add your custom background styles here */
+    background-color: #f0f0f0; /* Example background color */
+  }
+  .text-foreground {
+    /* Add your custom text color styles here */
+    color: #333333; /* Example text color */
+  }
+  .bg-cosmic {
+    background-image: url('/Users/aromano/Library/CloudStorage/ProtonDrive-acromano@pm.me-folder/KENSICO MGMT/APPS/STYLE-SPHERE2/style-sphere2/public/images/cosmic-background-image.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+}

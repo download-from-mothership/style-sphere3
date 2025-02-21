@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { env } from "@/lib/env";
+import { createClient } from '@supabase/supabase-js';
 
 export async function middleware(request: NextRequest) {
     try {
@@ -8,35 +9,11 @@ export async function middleware(request: NextRequest) {
             request,
         });
 
-        const supabaseUrl = env().SUPABASE_URL || 'default_url';
-        const supabaseAnonKey = env().SUPABASE_ANON_KEY || 'default_key';
+        // Ensure you have a valid URL here
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://your-supabase-url.supabase.co';
+        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'your-anon-key';
 
-        if (!supabaseUrl || !supabaseAnonKey) {
-            throw new Error('Supabase URL or Anon Key is not set');
-        }
-
-        const supabase = createServerClient(
-            supabaseUrl,
-            supabaseAnonKey,
-            {
-                cookies: {
-                    getAll() {
-                        return request.cookies.getAll();
-                    },
-                    setAll(cookiesToSet) {
-                        cookiesToSet.forEach(({ name, value }) =>
-                            request.cookies.set(name, value)
-                        );
-                        supabaseResponse = NextResponse.next({
-                            request,
-                        });
-                        cookiesToSet.forEach(({ name, value, options }) =>
-                            supabaseResponse.cookies.set(name, value, options)
-                        );
-                    },
-                },
-            },
-        );
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
         // IMPORTANT: Avoid writing any logic between createServerClient and
         // supabase.auth.getUser(). A simple mistake could make it very hard to debug

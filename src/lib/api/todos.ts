@@ -1,5 +1,7 @@
-import supabaseClient from "@/lib/supabase-client";
+import { createClient } from "@supabase/supabase-js";
 import { Tables, TablesInsert, TablesUpdate } from "@/types/database";
+
+const supabaseClient = createClient('your-supabase-url', 'your-anon-key');
 
 export type Todo = Tables<"todos">;
 

@@ -1,14 +1,14 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 // Check if the environment variables are set
-if (!supabaseUrl || !supabaseKey) {
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error("Supabase URL:", supabaseUrl);
+  console.error("Supabase Anon Key:", supabaseAnonKey ? "Set" : "Not Set");
   throw new Error("Supabase URL and Key are required");
 }
 
 // Initialize the Supabase client
-const supabaseClient = createClient(supabaseUrl, supabaseKey);
-
-export default supabaseClient;
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
