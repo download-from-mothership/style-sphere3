@@ -86,7 +86,7 @@ function LoginComponent() {
                                 <BottomGradient />
                             </button>
                             <p className="text-neutral-600 dark:text-neutral-400 text-sm text-center mt-8">
-                                Don't have an account?{" "}
+                                Don&apos;t have an account?{" "}
                                 <Link href="/create-account" className="text-neutral-500 dark:text-neutral-300">
                                     Sign up
                                 </Link>
